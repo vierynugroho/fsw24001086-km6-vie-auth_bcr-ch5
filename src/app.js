@@ -5,9 +5,6 @@ const bodyParser = require('body-parser');
 const router = require('./routes');
 const session = require('express-session');
 const flash = require('connect-flash');
-const createHttpError = require('http-errors');
-const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('../docs/swagger.json');
 
 //! config
 const app = express();
@@ -15,11 +12,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(`${__dirname}/public`));
-
-app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
-
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 //! middleware
 app.use(cors());

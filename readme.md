@@ -5,7 +5,7 @@
 # Database Diagram
 
 <p align='center'>
-<img style='width: 80%' src='#' alt='ERD' title='from -'>
+<img style='width: 80%' src='/public/assets/images/ERD/Challenge5.png' alt='ERD' title='ERD'>
 </p>
 
 # Postman Docs
@@ -23,6 +23,7 @@
 
 | METHOD | End Point        | Deskripsi                        | params                   |
 | ------ | ---------------- | -------------------------------- | ------------------------ |
+| GET    | /api/v1/docs     | Dokumentasi API                  |                          |
 | GET    | /api/v1/cars     | Mendapatkan Semua Data Cars      | [sort, search, capacity] |
 | GET    | /api/v1/cars/:id | Mendapatkan Data Car Berdasar ID |                          |
 | POST   | /api/v1/cars     | Menambahkan Data Car             |                          |
@@ -47,7 +48,7 @@
 
 ### KM x Binar Academy Batch 6
 
-|                                                       |
-| ----------------------------------------------------- |
-| **Catatan**                                           |
-| Submission Chapter 5 - CRUD Binar Car Rental Database |
+|                                                              |
+| ------------------------------------------------------------ |
+| **Catatan**                                                  |
+| Submission Chapter 5 - API Car Management - Binar Car Rental |

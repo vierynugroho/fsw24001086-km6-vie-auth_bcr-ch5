@@ -15,11 +15,10 @@ class AuthsRepository {
 		return user;
 	};
 
-	static register = async (userLoggedIn, name, email, role, hashedPassword, hashedConfirmPassword) => {
+	static register = async (name, email, role, hashedPassword, hashedConfirmPassword) => {
 		const newUser = await User.create({
 			id: randomUUID(),
 			name,
-			companyId: userLoggedIn.companyId,
 			role,
 		});
 

@@ -30,7 +30,7 @@ class AuthsController {
 
 	static register = async (req, res, next) => {
 		try {
-			const { userExist, newUser, authUser } = await AuthsService.register(req.user, req.body);
+			const { userExist, newUser, authUser } = await AuthsService.register(req.body);
 
 			if (userExist) {
 				return next(createHttpError(400, { message: 'User email already taken' }));

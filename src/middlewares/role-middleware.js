@@ -2,8 +2,10 @@ const createHttpError = require('http-errors');
 
 module.exports = (allowedRoles) => {
 	return async (req, res, next) => {
+		let role = req.user !== undefined ? req.user.role : 'member';
+
 		try {
-			if (!allowedRoles.includes(req.user.role)) {
+			if (!allowedRoles.includes(role)) {
 				next(
 					createHttpError(403, {
 						message: 'Your role does not have access permissions',

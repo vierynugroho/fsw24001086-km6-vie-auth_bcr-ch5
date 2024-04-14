@@ -30,7 +30,7 @@ class AuthsService {
 		}
 	};
 
-	static register = async (userLoggedIn, body) => {
+	static register = async (body) => {
 		const { name, email, role, password, confirmPassword } = body;
 		const userExist = await AuthsRepository.findUser(email);
 
@@ -38,7 +38,7 @@ class AuthsService {
 		const hashedPassword = bcrypt.hashSync(password, saltRounds);
 		const hashedConfirmPassword = bcrypt.hashSync(confirmPassword, saltRounds);
 
-		const { newUser, authUser } = await AuthsRepository.register(userLoggedIn, name, email, role, hashedPassword, hashedConfirmPassword);
+		const { newUser, authUser } = await AuthsRepository.register(name, email, role, hashedPassword, hashedConfirmPassword);
 		return { userExist, newUser, authUser };
 	};
 

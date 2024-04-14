@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	Cars.init(
 		{
-			id: DataTypes.STRING,
 			plate: DataTypes.STRING,
 			capacity: DataTypes.INTEGER,
 			type: DataTypes.STRING,

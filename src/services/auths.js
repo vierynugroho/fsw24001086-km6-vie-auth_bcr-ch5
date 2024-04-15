@@ -45,14 +45,17 @@ class AuthsService {
 
 	static update = async (userLoggedIn, body) => {
 		const { name, email, role, password, confirmPassword } = body;
-		const userExist = await AuthsRepository.findUser(email);
 
 		const saltRounds = 10;
 		const hashedPassword = bcrypt.hashSync(password, saltRounds);
 		const hashedConfirmPassword = bcrypt.hashSync(confirmPassword, saltRounds);
 
 		await AuthsRepository.update(userLoggedIn, name, email, role, hashedPassword, hashedConfirmPassword);
-		return { userExist, body, hashedPassword, hashedConfirmPassword };
+		return { name, email, role, hashedPassword, hashedConfirmPassword };
+	};
+
+	static delete = async (userLoggedIn) => {
+		await AuthsRepository.delete(userLoggedIn);
 	};
 }
 

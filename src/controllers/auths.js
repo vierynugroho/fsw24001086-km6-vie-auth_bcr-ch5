@@ -97,23 +97,35 @@ class AuthsController {
 
 	static update = async (req, res, next) => {
 		try {
-			const { userExist, body, hashedPassword, hashedConfirmPassword } = await AuthsService.update(req.user, req.body);
+			const users = await AuthsRepository.getAll();
+			let usersEmail = [];
 
-			if (!userExist) {
-				return next(createHttpError(404, { message: 'User not found' }));
+			users.map((user) => {
+				usersEmail.push(user.email);
+			});
+
+			const userLogged_email = req.user.Auth.email;
+
+			if (usersEmail.includes(req.body.email)) {
+				if (req.body.email !== userLogged_email) {
+					return next(createHttpError(400, { message: 'User email already taken' }));
+				} else {
+					delete req.body.email;
+				}
 			}
+
+			const { name, email, role, hashedPassword, hashedConfirmPassword } = await AuthsService.update(req.user, req.body);
 
 			res.status(201).json({
 				status: true,
 				message: 'update user successfully!',
 				data: {
 					user: {
-						name: body.name,
-						role: body.role,
+						name: name,
+						role: role,
 					},
 					auth: {
-						userId: body.userId,
-						email: body.email,
+						email: email || userLogged_email,
 						password: hashedPassword,
 						confirmPassword: hashedConfirmPassword,
 					},
@@ -124,7 +136,17 @@ class AuthsController {
 		}
 	};
 
-	static delete = async (req, res, next) => {};
+	static delete = async (req, res, next) => {
+		try {
+			await AuthsService.delete(req.user);
+			res.status(201).json({
+				status: true,
+				message: 'delete user successfully!',
+			});
+		} catch (error) {
+			next(createHttpError(500, { message: error.message }));
+		}
+	};
 }
 
 module.exports = {

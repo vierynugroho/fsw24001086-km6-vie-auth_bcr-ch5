@@ -58,7 +58,23 @@ class CarControllers {
 
 	static update = async (req, res, next) => {
 		try {
-			const { updatedCar } = await CarServices.update(req.user, req.body, req.files);
+			const cars = await CarsRepository.getAll();
+			let carsPlate = [];
+
+			cars.map((car) => {
+				carsPlate.push(car.plate);
+			});
+
+			const car = await CarsRepository.findCar(req.params.id);
+
+			if (carsPlate.includes(req.body.plate)) {
+				if (req.body.plate !== car.plate) {
+					return next(createHttpError(400, { message: 'Number plate has been used' }));
+				} else {
+					delete req.body.plate;
+				}
+			}
+			const { updatedCar } = await CarServices.update(req.user, req.params.id, req.body, req.files);
 
 			res.status(201).json({
 				status: true,

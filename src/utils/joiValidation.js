@@ -39,7 +39,7 @@ const registerAdminMemberSchema = Joi.object({
 const updateUserAdminSchema = Joi.object({
 	name: Joi.string().max(60).required(),
 	role: Joi.string().required().valid('admin', 'member'),
-	email: Joi.string().email().required(),
+	email: Joi.string().email(),
 	password: Joi.string().min(8).alphanum().required(),
 	confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({
 		'any.only': 'Confirm password does not match password',
@@ -49,7 +49,7 @@ const updateUserAdminSchema = Joi.object({
 const updateUserMemberSchema = Joi.object({
 	name: Joi.string().max(60).required(),
 	role: Joi.string().required().valid('member'),
-	email: Joi.string().email().required(),
+	email: Joi.string().email(),
 	password: Joi.string().min(8).alphanum().required(),
 	confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({
 		'any.only': 'Confirm password does not match password',

@@ -54,8 +54,8 @@ class CarsRepository {
 		return newCar;
 	};
 
-	static update = async (userLoggedIn, plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission, images) => {
-		const carExist = await this.findByPlate(plate);
+	static update = async (userLoggedIn, carId, plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission, images) => {
+		const carExist = await this.findCar(carId);
 		const updatedCar = await Cars.update(
 			{
 				plate: plate || carExist.plate,
@@ -70,13 +70,13 @@ class CarsRepository {
 				transmission: transmission || carExist.transmission,
 				imageUrl: images.imagesUrl || carExist.imageUrl,
 				imageId: images.imagesId || carExist.imageId,
-				createdBy: carExist.name,
+				createdBy: carExist.createdBy,
 				updatedBy: userLoggedIn.name,
 				deletedBy: '',
 			},
 			{
 				where: {
-					plate,
+					id: carId,
 				},
 			}
 		);

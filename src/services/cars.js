@@ -36,10 +36,11 @@ class CarServices {
 		return { newCar };
 	};
 
-	static update = async (userLoggedIn, body, files) => {
+	static update = async (userLoggedIn, carId, body, files) => {
 		const { plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission } = body;
 
-		const carExist = await CarsRepository.findByPlate(plate);
+		const carExist = await CarsRepository.findCar(carId);
+
 		const images = {
 			imagesUrl: carExist.imageUrl,
 			imagesId: carExist.imageId,
@@ -51,7 +52,7 @@ class CarServices {
 			images.imagesId = imagesId;
 		}
 
-		const updatedCar = await CarsRepository.update(userLoggedIn, plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission, images);
+		const updatedCar = await CarsRepository.update(userLoggedIn, carId, plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission, images);
 
 		return { updatedCar };
 	};

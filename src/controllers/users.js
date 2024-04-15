@@ -5,6 +5,7 @@ const { AuthsService } = require('../services/auths');
 
 class UsersController {
 	// update for superadmin to all users (belum selesai)
+	// update & delete user by id
 	static update = async (req, res, next) => {
 		try {
 			const { userExist, newUser, authUser } = await AuthsService.register(req.user, req.body, req.files);

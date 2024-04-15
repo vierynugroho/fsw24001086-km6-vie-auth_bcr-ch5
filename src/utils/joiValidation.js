@@ -36,7 +36,7 @@ const registerAdminMemberSchema = Joi.object({
 	}),
 });
 
-const updateUserAdminSchema = Joi.object({
+const updateUserAdminMemberSchema = Joi.object({
 	name: Joi.string().max(60).required(),
 	role: Joi.string().required().valid('admin', 'member'),
 	email: Joi.string().email(),
@@ -75,7 +75,7 @@ module.exports = {
 	loginSchema,
 	updateUserSchema,
 	registerAdminMemberSchema,
-	updateUserAdminSchema,
+	updateUserAdminMemberSchema,
 	updateUserMemberSchema,
 	carSchema,
 };

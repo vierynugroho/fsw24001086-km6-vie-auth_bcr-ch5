@@ -2,13 +2,26 @@
 //TODO: Komunikasi DB
 const { Cars, DeletedCars } = require('../databases/models');
 const { randomUUID } = require('crypto');
+const { Op, Sequelize } = require('sequelize');
 const imageKit = require('../libs/imageKit');
 
 class CarsRepository {
-	static getAll = async () => {
-		const cars = await Cars.findAll();
+	static getAll = async (offset, limit, capacity, search) => {
+		const { count, rows } = await Cars.findAndCountAll({
+			where: {
+				capacity: {
+					[Op.gte]: capacity,
+				},
+				manufacture: {
+					[Op.iLike]: `%${search}%`,
+				},
+			},
+			order: [[Sequelize.col('capacity'), 'ASC']],
+			offset,
+			limit,
+		});
 
-		return cars;
+		return { count, rows };
 	};
 
 	static findCar = async (id) => {

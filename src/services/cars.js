@@ -7,9 +7,9 @@ const { CarsRepository } = require('../repositories/cars');
 const handleUploadImage = require('../utils/handleUpload');
 
 class CarServices {
-	static getAll = async () => {
-		const cars = await CarsRepository.getAll();
-		return cars;
+	static getAll = async (offset, limit, capacity, search) => {
+		const { count, rows } = await CarsRepository.getAll(offset, limit, capacity, search);
+		return { count, rows };
 	};
 
 	static find = async (id) => {

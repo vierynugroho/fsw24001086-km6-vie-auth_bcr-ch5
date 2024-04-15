@@ -1,6 +1,6 @@
 //! Repository
 //TODO: Komunikasi DB
-const { Auth, User, Car } = require('../databases/models');
+const { Auth, User } = require('../databases/models');
 const { randomUUID } = require('crypto');
 
 class AuthsRepository {

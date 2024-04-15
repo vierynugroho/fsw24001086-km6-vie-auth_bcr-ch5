@@ -5,6 +5,7 @@ require('dotenv/config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { AuthsRepository } = require('../repositories/auths');
+const createHttpError = require('http-errors');
 
 class AuthsService {
 	static login = async (email, password) => {
@@ -32,14 +33,14 @@ class AuthsService {
 
 	static register = async (body) => {
 		const { name, email, role, password, confirmPassword } = body;
-		const userExist = await AuthsRepository.findUser(email);
 
 		const saltRounds = 10;
 		const hashedPassword = bcrypt.hashSync(password, saltRounds);
 		const hashedConfirmPassword = bcrypt.hashSync(confirmPassword, saltRounds);
 
 		const { newUser, authUser } = await AuthsRepository.register(name, email, role, hashedPassword, hashedConfirmPassword);
-		return { userExist, newUser, authUser };
+
+		return { newUser, authUser };
 	};
 
 	static update = async (userLoggedIn, body) => {

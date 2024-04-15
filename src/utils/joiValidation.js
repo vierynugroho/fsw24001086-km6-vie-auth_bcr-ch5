@@ -56,6 +56,20 @@ const updateUserMemberSchema = Joi.object({
 	}),
 });
 
+//! Cars
+const carSchema = Joi.object({
+	plate: Joi.string().max(15).required(),
+	manufacture: Joi.string().max(40).required(),
+	rentPerDay: Joi.number().min(0).required(),
+	capacity: Joi.string().valid('2', '4', '6').required(),
+	description: Joi.string().required(),
+	availableAt: Joi.string().required(),
+	available: Joi.boolean().required(),
+	type: Joi.string().required(),
+	year: Joi.string().max(4).required(),
+	transmission: Joi.string().required(),
+});
+
 module.exports = {
 	registerSchema,
 	loginSchema,
@@ -63,4 +77,5 @@ module.exports = {
 	registerAdminMemberSchema,
 	updateUserAdminSchema,
 	updateUserMemberSchema,
+	carSchema,
 };

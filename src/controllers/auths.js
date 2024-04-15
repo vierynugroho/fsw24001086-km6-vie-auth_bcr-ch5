@@ -2,6 +2,7 @@
 //TODO: handle req, res & body validation
 const createHttpError = require('http-errors');
 const { AuthsService } = require('../services/auths');
+const { AuthsRepository } = require('../repositories/auths');
 
 class AuthsController {
 	static login = async (req, res, next) => {
@@ -30,11 +31,12 @@ class AuthsController {
 
 	static register = async (req, res, next) => {
 		try {
-			const { userExist, newUser, authUser } = await AuthsService.register(req.body);
-
+			const userExist = await AuthsRepository.findUser(req.body.email);
 			if (userExist) {
 				return next(createHttpError(400, { message: 'User email already taken' }));
 			}
+
+			const { newUser, authUser } = await AuthsService.register(req.body);
 
 			res.status(201).json({
 				status: true,
@@ -121,7 +123,10 @@ class AuthsController {
 			next(createHttpError(500, { message: error.message }));
 		}
 	};
+
+	static delete = async (req, res, next) => {};
 }
+
 module.exports = {
 	AuthsController,
 };

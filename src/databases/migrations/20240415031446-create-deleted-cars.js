@@ -2,14 +2,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('Cars', {
+		await queryInterface.createTable('DeletedCars', {
 			id: {
-				primaryKey: true,
 				allowNull: false,
+				primaryKey: true,
+				type: Sequelize.STRING,
+			},
+			carId: {
 				type: Sequelize.STRING,
 			},
 			plate: {
-				unique: true,
 				type: Sequelize.STRING,
 			},
 			capacity: {
@@ -65,6 +67,6 @@ module.exports = {
 		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('Cars');
+		await queryInterface.dropTable('DeletedCars');
 	},
 };

@@ -12,49 +12,506 @@
 		},
 		{
 			"url": "http://localhost:2002",
-			"description": "dev"
+			"description": "test_dev"
 		}
 	],
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
 	"tags": [
+		{
+			"name": "root",
+			"description": "API"
+		},
+		{
+			"name": "auth",
+			"description": "Manage User Account"
+		},
 		{
 			"name": "cars",
 			"description": "Cars API"
 		},
 		{
-			"name": "root",
-			"description": "Cars API"
+			"name": "deleted cars",
+			"description": "Deleted Cars API"
 		}
 	],
 	"paths": {
-		"/": {
+		"/api/v1": {
 			"get": {
-				"description": "root api",
+				"description": "API",
 				"tags": ["root"],
-				"summary": "root",
+				"summary": "welcome",
 				"responses": {
 					"200": {
-						"description": "Ping Successfully! view doc here http:localhost:2000/api-docs"
+						"description": "OK"
 					}
 				}
 			}
 		},
-		"/api-docs": {
+		"/api/v1/docs": {
 			"get": {
 				"description": "api documentation",
 				"tags": ["root"],
 				"summary": "documentation",
 				"responses": {
 					"200": {
-						"description": "CARS API Documentation"
+						"description": "OK"
 					}
 				}
 			}
 		},
-		"/cars": {
+		"/api/v1/superadmin/register": {
+			"post": {
+				"tags": ["auth"],
+				"summary": "register user as superadmin",
+				"description": "register user with the role superadmin/admin/member",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"format": "uuid",
+										"description": "Auto Generated ID"
+									},
+									"name": {
+										"type": "string",
+										"description": "user name"
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"description": "user name"
+									},
+									"role": {
+										"type": "string",
+										"description": "user role [superadmin, admin, member]",
+										"enum": ["superadmin", "admin", "member"]
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									},
+									"confirmPassword": {
+										"type": "string",
+										"description": "user confirm password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/register": {
+			"post": {
+				"tags": ["auth"],
+				"summary": "register user as admin or member",
+				"description": "register user with the role member",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"format": "uuid",
+										"description": "Auto Generated ID"
+									},
+									"name": {
+										"type": "string",
+										"description": "user name"
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"description": "user name"
+									},
+									"role": {
+										"type": "string",
+										"description": "user role member",
+										"enum": ["member"]
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									},
+									"confirmPassword": {
+										"type": "string",
+										"description": "user confirm password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+
+		"/api/v1/login": {
+			"post": {
+				"tags": ["auth"],
+				"summary": "login user",
+				"description": "login user and generate jwt token for authentication",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"description": "user email"
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/me": {
 			"get": {
-				"summary": "All cars data",
+				"tags": ["auth"],
+				"summary": "get user loggedIn data",
+				"description": "get data from user loggedIn with jwt token for authentication",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/profile": {
+			"put": {
+				"tags": ["auth"],
+				"summary": "update user as superadmin, admin, member",
+				"description": "update user with the role member",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"format": "uuid",
+										"description": "Auto Generated ID"
+									},
+									"name": {
+										"type": "string",
+										"description": "user name"
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"description": "user name"
+									},
+									"role": {
+										"type": "string",
+										"description": "user role member",
+										"enum": ["member"]
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									},
+									"confirmPassword": {
+										"type": "string",
+										"description": "user confirm password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			},
+			"delete": {
+				"tags": ["auth"],
+				"summary": "delete user loggedIn",
+				"description": "delete user with logIn action",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/admin/profile": {
+			"put": {
+				"tags": ["auth"],
+				"summary": "update user as admin or superadmin",
+				"description": "update user with the role admin and member",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"format": "uuid",
+										"description": "Auto Generated ID"
+									},
+									"name": {
+										"type": "string",
+										"description": "user name"
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"description": "user name"
+									},
+									"role": {
+										"type": "string",
+										"description": "user role admin and member",
+										"enum": ["admin", "member"]
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									},
+									"confirmPassword": {
+										"type": "string",
+										"description": "user confirm password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/superadmin/profile": {
+			"put": {
+				"tags": ["auth"],
+				"summary": "update user as superadmin",
+				"description": "update user with the role superadmin, admin, and member",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"format": "uuid",
+										"description": "Auto Generated ID"
+									},
+									"name": {
+										"type": "string",
+										"description": "user name"
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"description": "user name"
+									},
+									"role": {
+										"type": "string",
+										"description": "user role superadmin, admin, and member",
+										"enum": ["superadmin", "admin", "member"]
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									},
+									"confirmPassword": {
+										"type": "string",
+										"description": "user confirm password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/cars": {
+			"get": {
+				"summary": "get all car data",
 				"description": "Get all cars data",
 				"tags": ["cars"],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"description": "current page",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"description": "page items",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "capacity",
+						"description": "filter by capacity (gte)",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"description": "search car by manufacture",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
 				"responses": {
 					"200": {
 						"description": "OK"
@@ -72,11 +529,16 @@
 			},
 			"post": {
 				"tags": ["cars"],
-				"summary": "Create new car",
+				"summary": "create new car data",
 				"description": "Create new car data",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"requestBody": {
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
 								"type": "object",
 								"properties": {
@@ -89,9 +551,9 @@
 										"type": "string",
 										"description": "Car Plate"
 									},
-									"image": {
-										"type": "string",
-										"description": "Car Image"
+									"images": {
+										"type": "array",
+										"description": "Car Image to ImageKit"
 									},
 									"capacity": {
 										"type": "number",
@@ -128,14 +590,6 @@
 									"transmission": {
 										"type": "string",
 										"description": "Car Transmission"
-									},
-									"options": {
-										"type": "array",
-										"description": "Car Option"
-									},
-									"specs": {
-										"type": "array",
-										"description": "Car Specification"
 									}
 								}
 							}
@@ -161,10 +615,10 @@
 				}
 			}
 		},
-		"/cars/{id}": {
+		"/api/v1/cars/{id}": {
 			"get": {
 				"tags": ["cars"],
-				"summary": "Detail car",
+				"summary": "get detail car data by id",
 				"description": "Get detail of car data by ID",
 				"parameters": [
 					{
@@ -195,8 +649,13 @@
 			},
 			"put": {
 				"tags": ["cars"],
-				"summary": "Update car",
+				"summary": "update car data",
 				"description": "Update car data by ID",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -211,7 +670,7 @@
 				],
 				"requestBody": {
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
 								"type": "object",
 								"properties": {
@@ -219,9 +678,9 @@
 										"type": "string",
 										"description": "Car Plate"
 									},
-									"image": {
-										"type": "string",
-										"description": "Car Image"
+									"images": {
+										"type": "array",
+										"description": "Car Image to ImageKit"
 									},
 									"capacity": {
 										"type": "number",
@@ -292,8 +751,13 @@
 			},
 			"delete": {
 				"tags": ["cars"],
-				"summary": "Delete car",
+				"summary": "delete car data",
 				"description": "Delete car data by ID",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -303,6 +767,66 @@
 						"schema": {
 							"type": "string",
 							"format": "uuid"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/deleted-cars": {
+			"get": {
+				"tags": ["deleted cars"],
+				"summary": "get all deleted car data",
+				"description": "Get all of deleted car data",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"description": "current page",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "limit",
+						"description": "page items",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "capacity",
+						"description": "filter by capacity (gte)",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "search",
+						"description": "search car by manufacture",
+						"schema": {
+							"type": "string"
 						}
 					}
 				],

@@ -17,6 +17,16 @@
 
 [READ HERE](https://documenter.getpostman.com/view/22814931/2sA3Bj9ZxZ)
 
+# HOW TO EXPLORE?
+
+1. go to vscode terminal
+2. run the command: `npm install`
+3. run the command: `npm run db:migrate`
+4. run the command: `npm run db:seed`
+5. run command: `npm run start`
+
+#### 😎 happy hacking!
+
 # ACCOUNT
 
 | role       | email               | password |
@@ -58,6 +68,12 @@
 | PUT    | /api/v1/cars/:id | [superadmin/admin] memperbarui data mobil berdasar ID  |                                 | true    |
 | DEL    | /api/v1/cars/:id | [superadmin/admin] menghapus data mobil berdasarkan ID |                                 | true    |
 |        |                  |                                                        |                                 |
+
+### DELETED CARS
+
+| METHOD | End Point            | Deskripsi                                                   | query params                    | isLogin |
+| ------ | -------------------- | ----------------------------------------------------------- | ------------------------------- | ------- |
+| GET    | /api/v1/deleted-cars | mendapatkan semua data mobil terhapus dengan filtering data | [page, limit, capacity, search] | true    |
 
 # Data Diri
 

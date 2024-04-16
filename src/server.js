@@ -5,5 +5,5 @@ const dotenv = require('dotenv/config');
 const PORT = process.env.PORT || 2000;
 
 app.listen(PORT, () => {
-	console.log(`Happy Eid Mubarak! http://localhost:${PORT}`);
+	console.log(`Happy Eid Mubarak! http://localhost:${PORT}/api/v1`);
 });

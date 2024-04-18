@@ -99,7 +99,71 @@
 									},
 									"role": {
 										"type": "string",
-										"description": "user role [superadmin, admin, member]",
+										"description": "user role allowed: [superadmin, admin, member]",
+										"enum": ["superadmin", "admin", "member"]
+									},
+									"password": {
+										"type": "string",
+										"description": "user password"
+									},
+									"confirmPassword": {
+										"type": "string",
+										"description": "user confirm password"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "OK"
+					},
+					"400": {
+						"description": "Bad Request"
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"500": {
+						"description": "Internal Server Error"
+					}
+				}
+			}
+		},
+		"/api/v1/admin/register": {
+			"post": {
+				"tags": ["auth"],
+				"summary": "register user as admin",
+				"description": "register user with the role member for admin",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"id": {
+										"type": "string",
+										"format": "uuid",
+										"description": "Auto Generated ID"
+									},
+									"name": {
+										"type": "string",
+										"description": "user name"
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"description": "user name"
+									},
+									"role": {
+										"type": "string",
+										"description": "user role allowed [member]",
 										"enum": ["superadmin", "admin", "member"]
 									},
 									"password": {
@@ -158,8 +222,8 @@
 									},
 									"role": {
 										"type": "string",
-										"description": "user role member",
-										"enum": ["member"]
+										"description": "user role allowed: member",
+										"enum": ["superadmin", "admin", "member"]
 									},
 									"password": {
 										"type": "string",

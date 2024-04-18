@@ -1,6 +1,6 @@
 //! Repository
 //TODO: Komunikasi DB
-const { Auth, User } = require('../databases/models');
+const { Auth, User, sequelize } = require('../databases/models');
 const { randomUUID } = require('crypto');
 
 class AuthsRepository {
@@ -24,70 +24,100 @@ class AuthsRepository {
 	};
 
 	static register = async (name, email, role, hashedPassword, hashedConfirmPassword) => {
-		const newUser = await User.create({
-			id: randomUUID(),
-			name,
-			role,
-		});
+		const transaction = await sequelize.transaction();
 
-		const authUser = await Auth.create({
-			id: randomUUID(),
-			email,
-			password: hashedPassword,
-			confirmPassword: hashedConfirmPassword,
-			userId: newUser.id,
-		});
+		try {
+			const newUser = await User.create(
+				{
+					id: randomUUID(),
+					name,
+					role,
+				},
+				{ transaction }
+			);
 
-		return { newUser, authUser };
+			const authUser = await Auth.create(
+				{
+					id: randomUUID(),
+					email,
+					password: hashedPassword,
+					confirmPassword: hashedConfirmPassword,
+					userId: newUser.id,
+				},
+				{
+					transaction,
+				}
+			);
+
+			await transaction.commit();
+			return { newUser, authUser };
+		} catch (error) {
+			await transaction.rollback();
+			throw new Error(error.message);
+		}
 	};
 
-	static update = async (userLoggedIn, name, email, role, hashedPassword, hashedConfirmPassword) => {
-		const userExist = await this.findUser(userLoggedIn.Auth.email);
-
-		await User.update(
-			{
-				name: name || userLoggedIn.name,
-				role: role || userLoggedIn.role,
-			},
-			{
-				where: {
-					id: userLoggedIn.id,
+	static update = async (userLoggedIn, data) => {
+		const transaction = await sequelize.transaction();
+		try {
+			await User.update(
+				data,
+				{
+					where: {
+						id: userLoggedIn.id,
+					},
 				},
-			}
-		);
+				{ transaction }
+			);
 
-		await Auth.update(
-			{
-				email: email,
-				password: hashedPassword || userExist.Auth.hashedPassword,
-				confirmPassword: hashedConfirmPassword || userExist.Auth.hashedConfirmPassword,
-			},
-			{
-				where: {
-					id: userLoggedIn.Auth.id,
+			await Auth.update(
+				data,
+				{
+					where: {
+						id: userLoggedIn.Auth.id,
+					},
 				},
-			}
-		);
+				{ transaction }
+			);
+			await transaction.commit();
+		} catch (error) {
+			await transaction.rollback();
+			throw new Error(error.message);
+		}
 	};
 
 	static delete = async (userLoggedIn) => {
 		const userExist = await this.findUser(userLoggedIn.Auth.email);
+
 		const authId = userExist.id;
 		const userId = userLoggedIn.id;
 
-		const deleteAuth = await Auth.destroy({
-			where: {
-				id: authId,
-			},
-		});
+		const transaction = await sequelize.transaction();
+		try {
+			const deleteAuth = await Auth.destroy(
+				{
+					where: {
+						id: authId,
+					},
+				},
+				{ transaction }
+			);
 
-		const deleteUser = await User.destroy({
-			where: {
-				id: userId,
-			},
-		});
+			const deleteUser = await User.destroy(
+				{
+					where: {
+						id: userId,
+					},
+				},
+				{ transaction }
+			);
 
-		return { deleteAuth, deleteUser };
+			await transaction.commit();
+			return { deleteAuth, deleteUser };
+		} catch (error) {
+			await transaction.rollback();
+			throw new Error(error.message);
+		}
 	};
 }
 

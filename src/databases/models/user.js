@@ -18,7 +18,16 @@ module.exports = (sequelize, DataTypes) => {
 	}
 	User.init(
 		{
-			name: DataTypes.STRING,
+			id: {
+				type: DataTypes.STRING,
+				primaryKey: true,
+				allowNull: false,
+				unique: {
+					args: true,
+					msg: 'Please enter unique id',
+				},
+			},
+			name: { type: DataTypes.STRING, allowNull: false },
 			role: {
 				type: DataTypes.ENUM('superadmin', 'admin', 'member'),
 				allowNull: false,

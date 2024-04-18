@@ -114,21 +114,19 @@ class AuthsController {
 				}
 			}
 
-			const { name, email, role, hashedPassword, hashedConfirmPassword } = await AuthsService.update(req.user, req.body);
+			if (req.body.password) {
+				if (!req.body.confirmPassword) {
+					return next(createHttpError(400, { message: 'Confirm Password is required' }));
+				}
+			}
+
+			const { body } = await AuthsService.update(req.user, req.body);
 
 			res.status(201).json({
 				status: true,
 				message: 'update user successfully!',
 				data: {
-					user: {
-						name: name,
-						role: role,
-					},
-					auth: {
-						email: email || userLogged_email,
-						password: hashedPassword,
-						confirmPassword: hashedConfirmPassword,
-					},
+					...body,
 				},
 			});
 		} catch (error) {

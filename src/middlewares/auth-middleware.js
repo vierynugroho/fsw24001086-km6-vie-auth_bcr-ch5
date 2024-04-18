@@ -19,6 +19,10 @@ class AuthsMiddleware {
 				include: ['Auth'],
 			});
 
+			if (!user) {
+				return next(createHttpError(401, { message: 'Unauthorized, please login' }));
+			}
+
 			req.user = user;
 			next();
 		} catch (error) {

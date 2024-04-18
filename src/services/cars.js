@@ -2,7 +2,6 @@
 //TODO: handle business logic
 
 require('dotenv/config');
-const bcrypt = require('bcrypt');
 const { CarsRepository } = require('../repositories/cars');
 const handleUploadImage = require('../utils/handleUpload');
 
@@ -18,27 +17,23 @@ class CarServices {
 	};
 
 	static create = async (userLoggedIn, body, files) => {
-		const { plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission } = body;
-
 		const images = {
 			imagesUrl: [],
 			imagesId: [],
 		};
 
-		if (!files.length === 0) {
+		if (files.length !== 0) {
 			const { imagesUrl, imagesId } = await handleUploadImage(files);
 			images.imagesUrl = imagesUrl;
 			images.imagesId = imagesId;
 		}
 
-		const newCar = await CarsRepository.create(userLoggedIn, plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission, images);
+		const newCar = await CarsRepository.create(userLoggedIn, body, images);
 
 		return { newCar };
 	};
 
 	static update = async (userLoggedIn, carId, body, files) => {
-		const { plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission } = body;
-
 		const carExist = await CarsRepository.findCar(carId);
 
 		const images = {
@@ -52,9 +47,19 @@ class CarServices {
 			images.imagesId = imagesId;
 		}
 
-		const updatedCar = await CarsRepository.update(userLoggedIn, carId, plate, capacity, type, year, rentPerDay, manufacture, description, availableAt, available, transmission, images);
+		const data = body || {};
+		// if (data === undefined) {
+		// 	throw Error('Nothing to update');
+		// }
 
-		return { updatedCar };
+		data.user = userLoggedIn;
+		data.carId = carId;
+		data.imageUrl = images.imagesUrl;
+		data.imageId = images.imagesId;
+
+		const { dataUpdate } = await CarsRepository.update(data);
+
+		return { dataUpdate };
 	};
 
 	static delete = async (id, userLoggedIn) => {

@@ -5,6 +5,8 @@ module.exports = (allowedRoles) => {
 		let role = req.user !== undefined ? req.user.role : 'member';
 
 		try {
+			const user = req.user;
+			if (!user) return next(createHttpError(401, { message: 'Unauthorized' }));
 			if (!allowedRoles.includes(role)) {
 				next(
 					createHttpError(403, {

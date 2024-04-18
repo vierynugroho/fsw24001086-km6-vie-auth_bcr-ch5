@@ -1,21 +1,13 @@
 const Joi = require('joi');
 
-const registerSchema = Joi.object({
-	name: Joi.string().max(60).required(),
-	role: Joi.string().required().valid('superadmin', 'admin', 'member'),
-	email: Joi.string().email().required(),
-	password: Joi.string().min(8).alphanum().required(),
-	confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({
-		'any.only': 'Confirm password does not match password',
-	}),
-});
-
+//! LOGIN
 const loginSchema = Joi.object({
 	email: Joi.string().email().required(),
 	password: Joi.string().min(8).alphanum().required(),
 });
 
-const updateUserSchema = Joi.object({
+//! Superadmin
+const onlySuperAdmin = Joi.object({
 	name: Joi.string().max(60).required(),
 	role: Joi.string().required().valid('superadmin', 'admin', 'member'),
 	email: Joi.string().email().required(),
@@ -25,8 +17,18 @@ const updateUserSchema = Joi.object({
 	}),
 });
 
+const onlySuperAdminUpdate = Joi.object({
+	name: Joi.string().max(60),
+	role: Joi.string().valid('superadmin', 'admin', 'member'),
+	email: Joi.string().email(),
+	password: Joi.string().min(8).alphanum(),
+	confirmPassword: Joi.any().valid(Joi.ref('password')).messages({
+		'any.only': 'Confirm password does not match password',
+	}),
+});
+
 //! Admin & Member
-const registerAdminMemberSchema = Joi.object({
+const onlyMemberAndAdmin = Joi.object({
 	name: Joi.string().max(60).required(),
 	role: Joi.string().required().valid('member'),
 	email: Joi.string().email().required(),
@@ -36,21 +38,21 @@ const registerAdminMemberSchema = Joi.object({
 	}),
 });
 
-const updateUserAdminMemberSchema = Joi.object({
-	name: Joi.string().max(60).required(),
-	role: Joi.string().required().valid('admin', 'member'),
+const onlyMemberUpdate = Joi.object({
+	name: Joi.string().max(60),
+	role: Joi.string().valid('member'),
 	email: Joi.string().email(),
-	password: Joi.string().min(8).alphanum().required(),
+	password: Joi.string().min(8).alphanum(),
 	confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({
 		'any.only': 'Confirm password does not match password',
 	}),
 });
 
-const updateUserMemberSchema = Joi.object({
-	name: Joi.string().max(60).required(),
-	role: Joi.string().required().valid('member'),
+const onlyAdminUpdate = Joi.object({
+	name: Joi.string().max(60),
+	role: Joi.string().valid('admin', 'member'),
 	email: Joi.string().email(),
-	password: Joi.string().min(8).alphanum().required(),
+	password: Joi.string().min(8).alphanum(),
 	confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({
 		'any.only': 'Confirm password does not match password',
 	}),
@@ -70,12 +72,26 @@ const carSchema = Joi.object({
 	transmission: Joi.string().required(),
 });
 
+const carUpdateSchema = Joi.object({
+	plate: Joi.string().max(15),
+	manufacture: Joi.string().max(40),
+	rentPerDay: Joi.number().min(0),
+	capacity: Joi.string().valid('2', '4', '6'),
+	description: Joi.string(),
+	availableAt: Joi.string(),
+	available: Joi.boolean(),
+	type: Joi.string(),
+	year: Joi.string().max(4),
+	transmission: Joi.string(),
+});
+
 module.exports = {
-	registerSchema,
 	loginSchema,
-	updateUserSchema,
-	registerAdminMemberSchema,
-	updateUserAdminMemberSchema,
-	updateUserMemberSchema,
+	onlySuperAdmin,
+	onlySuperAdminUpdate,
+	onlyMemberAndAdmin,
+	onlyMemberUpdate,
+	onlyAdminUpdate,
 	carSchema,
+	carUpdateSchema,
 };

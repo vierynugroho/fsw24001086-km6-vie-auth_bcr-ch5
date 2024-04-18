@@ -5,6 +5,10 @@
 		"title": "Cars API",
 		"description": "Challenge 5 Restful API BCR"
 	},
+	"externalDocs": {
+		"description": "Github Repository",
+		"url": "https://github.com/vierynugroho/fsw24001086-km6-vie-auth_bcr-ch5"
+	},
 	"servers": [
 		{
 			"url": "http://localhost:2000",
@@ -322,7 +326,7 @@
 			}
 		},
 		"/api/v1/profile": {
-			"put": {
+			"patch": {
 				"tags": ["auth"],
 				"summary": "update user as superadmin, admin, member",
 				"description": "update user with the role member",
@@ -410,7 +414,7 @@
 			}
 		},
 		"/api/v1/admin/profile": {
-			"put": {
+			"patch": {
 				"tags": ["auth"],
 				"summary": "update user as admin or superadmin",
 				"description": "update user with the role admin and member",
@@ -474,7 +478,7 @@
 			}
 		},
 		"/api/v1/superadmin/profile": {
-			"put": {
+			"patch": {
 				"tags": ["auth"],
 				"summary": "update user as superadmin",
 				"description": "update user with the role superadmin, admin, and member",
@@ -711,7 +715,7 @@
 					}
 				}
 			},
-			"put": {
+			"patch": {
 				"tags": ["cars"],
 				"summary": "update car data",
 				"description": "Update car data by ID",

@@ -74,7 +74,7 @@
 		"/api/v1/superadmin/register": {
 			"post": {
 				"tags": ["auth"],
-				"summary": "register user as superadmin",
+				"summary": "register user by superadmin",
 				"description": "register user with the role superadmin/admin/member",
 				"security": [
 					{
@@ -138,7 +138,7 @@
 		"/api/v1/admin/register": {
 			"post": {
 				"tags": ["auth"],
-				"summary": "register user as admin",
+				"summary": "register member by admin",
 				"description": "register user with the role member for admin",
 				"security": [
 					{
@@ -202,7 +202,7 @@
 		"/api/v1/register": {
 			"post": {
 				"tags": ["auth"],
-				"summary": "register user as admin or member",
+				"summary": "register member",
 				"description": "register user with the role member",
 				"requestBody": {
 					"content": {

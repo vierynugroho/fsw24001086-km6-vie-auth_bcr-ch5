@@ -48,15 +48,15 @@
 
 | METHOD | End Point                   | Deskripsi                                                                         | isLogin | params |
 | ------ | --------------------------- | --------------------------------------------------------------------------------- | ------- | ------ |
+| POST   | /api/v1/login               | login                                                                             | false   |        |
+| POST   | /api/v1/register            | register member                                                                   | false   |        |
 | POST   | /api/v1/superadmin/register | [superadmin] register user dengan role yang diizinkan superadmin / admin / member | true    |        |
 | POST   | /api/v1/admin/register      | [superadmin/admin] register user dengan role yang diizinkan member                | true    |        |
-| POST   | /api/v1/register            | [superadmin/admin/member] register user dengan role yang diizinkan member         | true    |        |
-| POST   | /api/v1/login               | login                                                                             | false   |        |
 | PATCH  | /api/v1/profile             | [superadmin/admin/member] update hanya dengan role member                         | true    |        |
 | PATCH  | /api/v1/admin/profile       | [superadmin/admin] update hanya dengan role admin dan member                      | true    |        |
 | PATCH  | /api/v1/superadmin/profile  | [superadmin] update dengan role superadmin, admin, member                         | true    |        |
-| DEL    | /api/v1/profile             | menghapus data user yang sedang login                                             | true    |        |
-| GET    | /api/v1/me                  | mendapatkan data user yang sedang login                                           | true    |        |
+| DEL    | /api/v1/profile             | [superadmin/admin/member] menghapus data user yang sedang login                   | true    |        |
+| GET    | /api/v1/me                  | [superadmin/admin/member] mendapatkan data user yang sedang login                 | true    |        |
 |        |                             |                                                                                   |         |        |
 
 ### CARS

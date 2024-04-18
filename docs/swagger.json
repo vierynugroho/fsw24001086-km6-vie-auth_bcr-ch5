@@ -328,8 +328,8 @@
 		"/api/v1/profile": {
 			"patch": {
 				"tags": ["auth"],
-				"summary": "update user as superadmin, admin, member",
-				"description": "update user with the role member",
+				"summary": "update user loggedIn as superadmin, admin, member",
+				"description": "update user loggedIn with the role member",
 				"security": [
 					{
 						"bearerAuth": []
@@ -391,7 +391,7 @@
 			"delete": {
 				"tags": ["auth"],
 				"summary": "delete user loggedIn",
-				"description": "delete user with logIn action",
+				"description": "delete user data logged In",
 				"security": [
 					{
 						"bearerAuth": []
@@ -416,8 +416,8 @@
 		"/api/v1/admin/profile": {
 			"patch": {
 				"tags": ["auth"],
-				"summary": "update user as admin or superadmin",
-				"description": "update user with the role admin and member",
+				"summary": "update user loggedIn as admin or superadmin",
+				"description": "update user loggedIn with the role admin and member",
 				"security": [
 					{
 						"bearerAuth": []
@@ -480,8 +480,8 @@
 		"/api/v1/superadmin/profile": {
 			"patch": {
 				"tags": ["auth"],
-				"summary": "update user as superadmin",
-				"description": "update user with the role superadmin, admin, and member",
+				"summary": "update user loggedIn as superadmin",
+				"description": "update user loggedIn with the role superadmin, admin, and member",
 				"security": [
 					{
 						"bearerAuth": []
